@@ -3,9 +3,9 @@
 ## To Do:
 
 ### Arduino:
-- [] Read sensor input
-- [] Interface with Rasberry Pi
+- [ ] Read sensor input
+- [ ] Interface with Rasberry Pi
 
 ### Rasberry Pi:
-- [] Web Server
-- [] Data Science
+- [ ] Web Server
+- [ ] Data Science
