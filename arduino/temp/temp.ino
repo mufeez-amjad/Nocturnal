@@ -6,6 +6,8 @@ dht DHT;
 
 #define sec 1000
 
+int min;
+
 void setup(){
   Serial.begin(9600);
 }
@@ -18,4 +20,5 @@ void loop()
   Serial.print("Humidity = ");
   Serial.println(DHT.humidity);
   delay(5 * sec);
+
 }
