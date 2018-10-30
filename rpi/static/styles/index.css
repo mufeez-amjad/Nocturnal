@@ -1,7 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:600|Raleway:500,600,700');
 
+html *
+{
+   font-family: 'Montserrat', sans-serif !important;
+   color: #333333;
+}
+
 h1 {
-  font-family: 'Montserrat', sans-serif;
   font-size: 2rem;
   font-weight: 600;
   color: #35a6de;
@@ -16,40 +21,66 @@ body {
   width: 100%;
   background-color: rgb(238, 238, 238);
   height: fit-content;
-  justify-content: center;
-  align-content: center;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
 }
 
 .container {
+  display: flex;
   background-color: rgb(228, 228, 228);
   height: 100%;
   width: 100%;
-  flex-flow: row wrap;
+  justify-content: space-around;
+  flex-direction: column;
 }
 
 .profile {
   display: flex;
   background-color: white;
   flex-direction: column;
-  justify-content: center;
-  align-content: center;
   align-items: center;
+  justify-content: space-evenly;
+  width: fit-content;
+  padding: 0 50px 0 50px;
+}
+
+.profile h1 {
+  font-size: 1.75rem;
+  color: #333333;
+}
+
+.profile h2 {
+  font-size: 1.3rem;
 }
 
 .profile img {
   width: 150px;
   height: 150px;
   border-radius: 50%;
+  padding-top: 25px;
 }
 
 .metrics {
+  margin-top: -20px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
 .metrics div {
   display: block;
-  border-bottom: 3px;
-  border-color: black;
+  padding: 25px;
 }
+
+.metrics div h3 {
+  font-size: 1rem;
+}
+
+.metrics div h4 {
+  font-size: 0.75rem;
+  color: #777777;
+}
+
