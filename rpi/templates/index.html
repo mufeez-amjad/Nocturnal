@@ -2,9 +2,8 @@
 <html>
 <head>
 <title>Nocturnal</title>
-<!-- {{ url_for('static',filename='styles/index.css') }} -->
-<link rel="stylesheet" type="text/css" href="../static/styles/index.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
 </head>
 <body>
 
@@ -16,81 +15,69 @@
 
   <div class='container'>
 
-      <div class='profile'>
-        <img src="../static/default.jpeg" alt="mufeez.jpg">
-        <h1>Mufeez Amjad</h1>
-        <h2>Master Bedroom</h2>
-        
-
-        <div class="metrics">
-
-          <div>
-            <h3>18</h3>
-            <h4>years old</h4>
-          </div>
-  
-          <div>
-            <h3>Male</h3>
-            <h4>Gender</h4>
-          </div>
-  
-          <div>
-              <h3>175 cm</h3>
-              <h4>Height</h4>
-            </div>
-  
-          <div>
-              <h3>75 kg</h3>
-              <h4>Weight</h4>
-            </div>
-
-        </div>
-        
-        
-      </div>
-
-      <div class='tips'>
-        <h2>Tips</h2>
-        <ul>
-          <li>Get some exercise!</li>
-          <li>Read a book before sleeping.</li>
-          <li>Drink some of your favourite tea.</li>
-        </ul>
-      </div>
-
-      <div class='sleep-quality'> <!-- +graph -->
-        <h2>Sleep Quality</h2>
-        <h3>79%</h3>
-      </div>
-
-      <div class='sleep-cycle'> <!-- graph -->
-        <h2>Sleep Cycle</h2>
-      </div>
-
-      <div class='sleep-quality'>
-        <h2>Your Ideal Sleeping Conditions</h2>
-        <ul>
-          <li>Temperature: 21 degrees</li>
-          <li>Humidity: </li>
-          <li>Lighting: Dim</li>
-        </ul>
-      </div>
-
-      <div class='time-in-bed'>
-        <h2>Time in Bed Today</h2>
-        <h3>5:30</h3>
-      </div>
-
-      <div class='snoring'>
-        <h2>Snoring</h2>
-        <h3>0 dB</h3>
-      </div>
+    <div class="graph1">
+        <h1>{{ title }}</h1>
       
-      
+        <canvas id="chart" width="600" height="400"></canvas>
+        <script>
+          // bar chart data
+          var barData = {
+            labels : [
+              {% for item in labels %}
+                "{{ item }}",
+              {% endfor %}
+            ],
+            datasets : [{
+              fillColor: "rgba(151,187,205,0.2)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              pointStrokeColor: "#fff",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "rgba(151,187,205,1)",
+              bezierCurve : false,
+              data : [
+          {% for item in values %}
+                  {{ item }},
+                {% endfor %}]
+              }
+      ]
+          }
+          Chart.defaults.global.animationSteps = 50;
+          Chart.defaults.global.tooltipYPadding = 16;
+          Chart.defaults.global.tooltipCornerRadius = 0;
+          Chart.defaults.global.tooltipTitleFontStyle = "normal";
+          Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
+          Chart.defaults.global.animationEasing = "easeOutBounce";
+          Chart.defaults.global.responsive = false;
+          Chart.defaults.global.scaleLineColor = "black";
+          Chart.defaults.global.scaleFontSize = 16;
+          // get bar chart canvas
+          var mychart = document.getElementById("chart").getContext("2d");
+          steps = 10
+          max = {{ max }}
+          // draw bar chart
+          var LineChartDemo = new Chart(mychart).Line(barData, {
+            scaleOverride: true,
+            scaleSteps: steps,
+            scaleStepWidth: Math.ceil(max / steps),
+            scaleStartValue: 0,
+            scaleShowVerticalLines: true,
+            scaleShowGridLines : true,
+            barShowStroke : true,
+            scaleShowLabels: true,
+            bezierCurve: false,
+            scales: { 
+              xAxes: [{
+                ticks: {
+                    display: false //this will remove only the label
+                }
+            }] 
+            }
+          });
+        </script>
+    </div>
+          
         
-        
-      </div>
-
   </div>
 
   
