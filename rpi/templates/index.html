@@ -2,12 +2,16 @@
 <html>
 <head>
 <title>Nocturnal</title>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/index.css') }}">
+<!-- {{ url_for('static',filename='styles/index.css') }} -->
+<link rel="stylesheet" type="text/css" href="../static/styles/index.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 <body>
 
-  <div class='header'>
-    <h1>Nocturnal: Sleep Tracker</h1>
+  <div class="sidenav">
+    <a href="#"><img src="../static/dashboard.png" alt="Dashboard" style="width: 40px"></a>
+    <a href="#"><img src="../static/notifications.png" alt="Notifications" style="width: 40px"></a>
+    <a href="#"><img src="../static/profile.png" alt="Profile" style="width: 40px"></a>
   </div>
 
   <div class='container'>
@@ -71,8 +75,6 @@
           <li>Lighting: Dim</li>
         </ul>
       </div>
-
-
 
       <div class='time-in-bed'>
         <h2>Time in Bed Today</h2>
