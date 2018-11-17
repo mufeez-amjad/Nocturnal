@@ -3,80 +3,247 @@
 <head>
 <title>Nocturnal</title>
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
-<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js'></script>
 </head>
 <body>
 
   <div class="sidenav">
-    <a href="#"><img src="../static/dashboard.png" alt="Dashboard" style="width: 40px"></a>
-    <a href="#"><img src="../static/notifications.png" alt="Notifications" style="width: 40px"></a>
-    <a href="#"><img src="../static/profile.png" alt="Profile" style="width: 40px"></a>
+    <a href="#"><i class="fas fa-moon" style="font-size: 40px"></i></a>
+    <a href="#"><i class="far fa-bell" style="font-size: 40px"></i></a>
+    <a href="#"><i class="far fa-user" style="font-size: 40px"></i></a>
   </div>
 
   <div class='container'>
 
-    <div class="graph1">
-        <h1>{{ title }}</h1>
+    <div class="sleepGraph">
       
-        <canvas id="chart" width="600" height="400"></canvas>
+        <canvas id="myChart" width="1050" height="200"></canvas>
         <script>
           // bar chart data
-          var barData = {
+          var lineData = {
             labels : [
-              {% for item in labels %}
+              {% for item in sleepGraphLabels %}
                 "{{ item }}",
               {% endfor %}
             ],
             datasets : [{
-              fillColor: "rgba(151,187,205,0.2)",
-              strokeColor: "rgba(151,187,205,1)",
-              pointColor: "rgba(151,187,205,1)",
-              pointStrokeColor: "#fff",
-              pointHighlightFill: "#fff",
-              pointHighlightStroke: "rgba(151,187,205,1)",
-              bezierCurve : false,
+              backgroundColor: "#248af7",
+              borderColor: "#fff",
+              
+              bezierCurve : true,
               data : [
-          {% for item in values %}
-                  {{ item }},
-                {% endfor %}]
-              }
-      ]
+                  {% for item in values %}
+                    {{ item }},
+                  {% endfor %}
+                ]
+            }]     
           }
-          Chart.defaults.global.animationSteps = 50;
-          Chart.defaults.global.tooltipYPadding = 16;
-          Chart.defaults.global.tooltipCornerRadius = 0;
-          Chart.defaults.global.tooltipTitleFontStyle = "normal";
-          Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
-          Chart.defaults.global.animationEasing = "easeOutBounce";
-          Chart.defaults.global.responsive = false;
-          Chart.defaults.global.scaleLineColor = "black";
-          Chart.defaults.global.scaleFontSize = 16;
+          
           // get bar chart canvas
-          var mychart = document.getElementById("chart").getContext("2d");
+          var myChart = document.getElementById("myChart").getContext("2d");
           steps = 10
           max = {{ max }}
           // draw bar chart
-          var LineChartDemo = new Chart(mychart).Line(barData, {
-            scaleOverride: true,
-            scaleSteps: steps,
-            scaleStepWidth: Math.ceil(max / steps),
-            scaleStartValue: 0,
-            scaleShowVerticalLines: true,
-            scaleShowGridLines : true,
-            barShowStroke : true,
-            scaleShowLabels: true,
-            bezierCurve: false,
-            scales: { 
-              xAxes: [{
-                ticks: {
-                    display: false //this will remove only the label
+          var myLineChart = new Chart(myChart, {
+              type: 'line',
+              data: lineData,
+              options: {
+                legend: {
+                    display: false,
+                    labels: {
+                        fontColor: 'rgb(255, 255, 255)'
+                    },
+                },
+                scales: {
+                    xAxes: [{
+                      gridLines: {
+                        display: false,
+                      }
+                    }],
+                    yAxes: [{
+                      display: false,
+                      gridLines:  {
+                        display: false,
+                      }
+                    }]
                 }
-            }] 
-            }
+              }
           });
         </script>
     </div>
+    
+    <div class="content">
+
+      <div class="panel">
+        <div class="header">
+            <h2>Analytics</h1>
+            <h1>Time in Bed</h1>
+        </div>
           
+          <div class="stats">
+
+              <div class="split">
+                  <h1>Today</h1>
+                  <h3>10 hours</h3>
+              </div>
+
+              <div class="split">
+                  <h1>Average</h1>
+                  <h3>10 hours</h3>
+              </div>
+            </div>
+
+            <!-- TODO: Have tabs for different lengths of time -->
+          
+          <div class="timeGraph">
+            
+              <canvas id="timeChart" width="200" height="100"></canvas>
+              <script>
+                // bar chart data
+                var lineData = {
+                  labels : [
+                    {% for item in timeWeekLabels %}
+                      "{{ item }}",
+                    {% endfor %}
+                  ],
+                  datasets : [{
+                    backgroundColor: "#248af7",
+                    borderColor: "#248af7",
+                    fill: false,
+                    bezierCurve : true,
+                    data : [
+                        {% for item in values %}
+                          {{ item }},
+                        {% endfor %}
+                      ]
+                  }]     
+                }
+                
+                // get bar chart canvas
+                var myChart = document.getElementById("timeChart").getContext("2d");
+                steps = 10
+                max = {{ max }}
+                // draw bar chart
+                var myLineChart = new Chart(myChart, {
+                    type: 'line',
+                    data: lineData,
+                    options: {
+                      legend: {
+                          display: false,
+                          labels: {
+                              fontColor: 'rgb(255, 255, 255)'
+                          },
+                      },
+                      scales: {
+                          xAxes: [{
+                            gridLines: {
+                              display: false,
+                            }
+                          }],
+                          yAxes: [{
+                            display: false,
+                            gridLines:  {
+                              display: false,
+                            }
+                          }]
+                      }
+                    }
+                });
+              </script>
+          </div>
+
+          <div class="footer">
+              <h1>Just updated</h1>
+          </div>
+    
+      </div>
+
+      <div class="panel">
+          <div class="header">
+              <h2>Analytics</h1>
+              <h1>Sleep Quality</h1>
+          </div>
+            
+            <div class="stats">
+  
+                <div class="split">
+                    <h1>Today</h1>
+                    <h3 style="color: green">Good</h3>
+                </div>
+  
+                <div class="split">
+                    <h1>Average</h1>
+                    <h3 style="color: red">Poor</h3>
+                </div>
+            </div>
+
+            <div class="timeGraph">
+            
+                <canvas id="sleepWeekChart" width="200" height="100"></canvas>
+                <script>
+                  // bar chart data
+                  var lineData = {
+                    labels : [
+                      {% for item in timeWeekLabels %}
+                        "{{ item }}",
+                      {% endfor %}
+                    ],
+                    datasets : [{
+                      backgroundColor: "#248af7",
+                      borderColor: "#248af7",
+                      fill: false,
+                      bezierCurve : true,
+                      data : [
+                          {% for item in values %}
+                            {{ item }},
+                          {% endfor %}
+                        ]
+                    }]     
+                  }
+                  
+                  // get bar chart canvas
+                  var myChart = document.getElementById("sleepWeekChart").getContext("2d");
+                  steps = 10
+                  max = {{ max }}
+                  // draw bar chart
+                  var myLineChart = new Chart(myChart, {
+                      type: 'line',
+                      data: lineData,
+                      options: {
+                        legend: {
+                            display: false,
+                            labels: {
+                                fontColor: 'rgb(255, 255, 255)'
+                            },
+                        },
+                        scales: {
+                            xAxes: [{
+                              gridLines: {
+                                display: false,
+                              }
+                            }],
+                            yAxes: [{
+                              display: false,
+                              gridLines:  {
+                                display: false,
+                              }
+                            }]
+                        }
+                      }
+                  });
+                </script>
+            </div>
+  
+            <div class="footer">
+                <h1>Just updated</h1>
+            </div>
+      
+        </div>
+
+    </div>
+    
+    
         
   </div>
 

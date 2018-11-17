@@ -1,19 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:600|Raleway:500,600,700');
 
-html *
-{
-   font-family: 'Montserrat', sans-serif !important;
-   color: #333333;
-}
-
-h1 {
-  font-size: 2rem;
-  font-weight: 600;
-  color: #35a6de;
-}
-
 body {
-
+  font-family: 'Montserrat', sans-serif !important;
+  color: #333333;
 }
 
 .sidenav {
@@ -29,7 +18,7 @@ body {
 }
 
 .sidenav a {
-  padding: 6px 8px 6px 16px;
+  padding: 15px 8px 15px 16px;
   text-decoration: none;
   font-size: 25px;
   color: #ffffff;
@@ -56,12 +45,88 @@ body {
 .container {
   display: flex;
   background-color: rgb(228, 228, 228);
-  /* height: 100%;
-  width: 100%; */
+  height: 100%;
+  width: 100%;
   justify-content: space-around;
   flex-direction: column;
   overflow: hidden;
+  margin-left: 60px; /* Same as the width of the sidebar */
+  margin-right: 60px;
+  margin-top: -10px;
 }
+
+.container .sleepGraph {
+  width: 100%;
+  height: 300px;
+  background-color: rgb(184, 184, 184);
+}
+
+.container .content {
+  display: flex;
+  justify-content: space-evenly;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: -20px;
+}
+
+.container .content .panel {
+  background-color: #fff;
+  -webkit-box-shadow: 4px 10px 58px -9px rgba(0,0,0,0.24);
+  -moz-box-shadow: 4px 10px 58px -9px rgba(0,0,0,0.24);
+  box-shadow: 4px 10px 58px -9px rgba(0,0,0,0.24);
+  border-radius: 5px;
+  width: 500px;
+  padding: 15px 30px 15px 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel .header h2 {
+  font-size: 1em;
+  color: #9c9c9c;
+}
+
+.panel .header h1 {
+  font-size: 1.6em;
+  color: #333333;
+}
+
+.panel .stats {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.panel .stats .split {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding-bottom: 10px;
+}
+
+.panel .stats .split h1 {
+  font-size: 1em;
+  color: #7e7d7d;
+}
+
+.panel .stats .split h3 {
+  margin-top: -10px;
+  font-size: 1.2em;
+  color: #248af7;
+}
+
+.timeGraph {
+  width: 500px;
+  height: 250px;
+}
+
+.panel .footer h1 {
+  padding-top: 10px;
+  font-size: 1em;
+}
+
 
 
 
