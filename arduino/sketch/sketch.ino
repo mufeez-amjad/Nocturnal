@@ -18,7 +18,14 @@ void getHumidTemp() {
   Serial.println(DHT.humidity);
 }
 
+void getLight() {
+  int lightValue = analogRead(LIGHT_PIN);
+  Serial.print("Light = ");
+  Serial.println(lightValue);
+}
+
 void loop() {
   getHumidTemp();
+  getLight();
   delay(5000);
 }
