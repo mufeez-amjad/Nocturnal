@@ -57,6 +57,7 @@ body {
   margin-left: 60px; /* Same as the width of the sidebar */
   margin-right: 60px;
   margin-top: -10px;
+  align-items: center;
 }
 
 .container .sleepGraph {
@@ -67,10 +68,12 @@ body {
 
 .container .content {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+  flex-wrap: wrap;
   margin-left: 50px;
   margin-right: 50px;
-  margin-top: -20px;
+  margin-top: -60px;
+  z-index: 30;
 }
 
 .container .content .panel {
@@ -79,10 +82,13 @@ body {
   -moz-box-shadow: 4px 10px 58px -9px rgba(0,0,0,0.24);
   box-shadow: 4px 10px 58px -9px rgba(0,0,0,0.24);
   border-radius: 5px;
-  width: 500px;
+  width: fit-content;
+  height: fit-content;
   padding: 15px 30px 15px 30px;
   display: flex;
   flex-direction: column;
+  margin: 40px;
+  flex-basis: content;
 }
 
 .panel .header h2 {
