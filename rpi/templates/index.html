@@ -254,7 +254,167 @@
                 <h1>Just updated</h1>
             </div>
       
-        </div>
+      </div>
+
+      <div class="panel">
+          <div class="header">
+              <h2>Analytics</h1>
+              <h1>Wake Up and Sleep Time</h1>
+          </div>
+            
+            <div class="stats">
+  
+                <div class="split">
+                    <h1>Sleep</h1>
+                    <h3>8:00 pm</h3>
+                </div>
+  
+                <div class="split">
+                    <h1>Wake Up</h1>
+                    <h3>6:00 am</h3>
+                </div>
+            </div>
+
+            <div class="wakeSleepTimeGraph">
+            
+                <canvas id="wakeSleepGraph" width="200" height="100"></canvas>
+                <script>
+                  // bar chart data
+
+                  var lineData = {
+                    labels : [
+                      {% for item in timeWeekLabels %}
+                        "{{ item }}",
+                      {% endfor %}
+                    ],
+                    datasets : [{
+                      backgroundColor: "#248af7",
+                      borderColor: "#248af7",
+                      fill: false,
+                      bezierCurve : true,
+                      data : [
+                          {% for item in values %}
+                            {{ item }},
+                          {% endfor %}
+                        ]
+                    },
+                    {
+                      backgroundColor: "#248af7",
+                      borderColor: "#248af7",
+                      fill: false,
+                      bezierCurve : true,
+                      data : [
+                          {% for item in values %}
+                            {{ item }}-20,
+                          {% endfor %}
+                        ]
+                    }]     
+                  }
+                  
+                  // get bar chart canvas
+                  var myChart = document.getElementById("wakeSleepGraph").getContext("2d");
+                  steps = 10
+                  // max = {{ max }}
+                  // draw bar chart
+                  var myLineChart = new Chart(myChart, {
+                      type: 'line',
+                      data: lineData,
+                      options: {
+                        legend: {
+                            display: false,
+                            labels: {
+                                fontColor: 'rgb(255, 255, 255)'
+                            },
+                        },
+                        scales: {
+                            xAxes: [{
+                              gridLines: {
+                                display: false,
+                              }
+                            }],
+                            yAxes: [{
+                              display: false,
+                              gridLines:  {
+                                display: false,
+                              }
+                            }]
+                        }
+                      }
+                  });
+                </script>
+            </div>
+  
+            <div class="footer">
+                <h1>Just updated</h1>
+            </div>
+      
+      </div>
+
+      <div style="display: flex; flex-direction: column;">
+          <div class="panel">
+              <div class="header">
+                  <h2>Insights</h1>
+                  <h1>Temperature & Humidity</h1>
+              </div>
+                
+                <div class="stats">
+      
+                    <div class="split">
+                        <h1>Today</h1>
+                        <h3 style="">21°  40% RH</h3>
+                    </div>
+      
+                    <div class="split">
+                        <h1>Ideal</h1>
+                        <h3 style="color: green">23°  20% RH</h3>
+                    </div>
+                </div>
+          </div>
+          <div class="panel">
+              <div class="header">
+                  <h2>Insights</h1>
+                  <h1>Tips for Better Sleep</h1>
+              </div>
+
+                
+                
+                <ol>
+                  <li id="tip1"></li>
+                  <li id="tip2"></li>
+                  <li id="tip3"></li>
+                </ol>
+
+                <script>
+                    // var tips = {{ tipsArr }};
+
+                    var tipsLength = 16;
+
+                    var random1 = Math.floor(Math.random() * tipsLength);
+
+                    var random2 = Math.floor(Math.random() * tipsLength);
+                    
+                    while (random1 == random2) {
+                      random2 = Math.floor(Math.random() * tipsLength);
+                    }
+
+                    var random3 = Math.floor(Math.random() * tipsLength);
+
+                    while (random3 == random2 || random3 == random1) {
+                      random3 = Math.floor(Math.random() * tipsLength);
+                    }
+                    // {% for item in tipsArr %}
+                    //   "{{ item }}",
+                    // {% endfor %}
+                    document.getElementById("tip1").innerHTML = "{{ tipsArr[0] }}";
+                    document.getElementById("tip2").innerHTML = "{{ tipsArr[1] }}";
+                    document.getElementById("tip3").innerHTML = "{{ tipsArr[2] }}";
+                    // document.getElementById("tip1").innerHTML = "{{ tipsArr[1] }}";
+                </script>
+          </div>
+          
+      </div>
+       
+        
 
     </div>
     
