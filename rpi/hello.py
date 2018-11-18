@@ -1,3 +1,5 @@
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 from flask import Flask, render_template
 
 app = Flask(__name__) 
@@ -15,10 +17,9 @@ timeLabels2 = [
 timeLabels = [
     '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30', '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00']
 
-values = [
-    967.67, 1190.89, 13079.75, 1349.19,
-    2328.91, 2504.28, 2873.83, 
-]
+#Spreadsheed Auth
+scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+credentials = ServiceAccountCredentials.from_json_keyfile_name('Nocturnal-7d790916f958.json', scope)
 
 colors = [
     "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
@@ -28,8 +29,37 @@ colors = [
 
 @app.route("/")
 def hello():
-    line_values = values
-    return render_template('index.html', max=17000, sleepGraphLabels=timeLabels, values=line_values, timeWeekLabels=weekLabels)
+    gc = gspread.authorize(credentials)
+
+    wks = gc.open('Nocturnal').worksheet("Time")
+
+    allTime = wks.col_values(2)
+    thisWeekTime = wks.col_values(4)
+    del allTime[0]
+    del thisWeekTime[0]
+
+    avgTime = 0
+    for cell in allTime:
+        avgTime += float(cell)
+
+    avgTime /= len(allTime)
+    avgTime = round(avgTime, 1)
+
+    wks = gc.open('Nocturnal').worksheet("Night")
+
+    nigthData = wks.get_all_records()
+    condensedNightData = []
+    averageForInterval = 0
+
+    for i in range(len(nigthData)):
+        averageForInterval += nigthData[i]['Activity']
+        if (nigthData[i]['Time'] in timeLabels2):
+            if (i < 30): averageForInterval /= i+1
+            else: averageForInterval /= 30
+            condensedNightData.append(averageForInterval)
+            averageForInterval = 0
+
+    return render_template('index.html', sleepGraphLabels=timeLabels, values=condensedNightData, timeWeekLabels=weekLabels, averageTime=avgTime, timeGraphData=thisWeekTime)
  
 if __name__ == "__main__":
     app.run(debug=True)
