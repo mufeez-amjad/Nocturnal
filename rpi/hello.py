@@ -3,7 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from flask import Flask, render_template, jsonify
 import datetime
 
-app = Flask(__name__) 
+app = Flask(__name__)
 
 weekLabels = [
     'Monday', 'Tuesday', 'Wednesday', 'Thursday',
@@ -59,7 +59,7 @@ def hello():
     #compare sleep scores with variables
     sleepScores = wks.col_values(2)
     del sleepScores[0]
-    sleepScores = map(int, sleepScores)
+    sleepScores = list(map(int, sleepScores))
     maxSleepScore = (max(sleepScores))
     idealTemps = []
     idealHumids = []
@@ -119,7 +119,7 @@ def hello():
      averageTime=avgTime, timeGraphData=thisWeekTimeOrdered, tipsArr=tips, timeSleptToday=round(float(thisWeekTime[-1]), 1),
       idealHumidity=idealHum, idealTemperature=idealTemp, idealLighting=idealLight, tempToday=idealData[-1]['Temperature'],
        humidityToday=idealData[-1]['Humidity'], lightingToday=lightingToday, thisWeekSleepScore=thisWeekSleepScoresOrdered)
- 
+
 @app.route("/update", methods=['POST'])
 def update():
     wks = gc.open('Nocturnal').worksheet("Night")
@@ -140,6 +140,6 @@ def update():
             averageForInterval = 0
 
     return render_template('sleepGraph.html', sleepGraphLabels=timeLabels, values=condensedNightData, timeWeekLabels=weekLabels)
- 
+
 if __name__ == "__main__":
     app.run(debug=True)

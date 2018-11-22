@@ -68,7 +68,6 @@ def readData():
         if line == "END":
             if sleeping:
                 count += 1
-                print(count)
         else:
             type = getType(line)
             value = getValue(line)
@@ -89,7 +88,10 @@ def readData():
                     if previous_light > 300 and value < 300 and not sleeping:
                         # Make sure its not day time
                         print("Going to bed...")
-                        # Clear night sheet
+                        delete = night_sheet.range("A2:B"+str(night_sheet.row_count))
+                        for cell in delete:
+                            cell.value = ""
+                        night_sheet.update_cells(delete)
                         start_time = datetime.datetime.now()
                         sleeping = True
                     elif previous_light < 300 and value > 300 and sleeping:
