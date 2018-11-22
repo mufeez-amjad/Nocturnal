@@ -1,6 +1,6 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 import datetime
 
 app = Flask(__name__) 
@@ -86,6 +86,18 @@ def hello():
     elif (todaysLighting < 650): lightingToday = "Average"
     else: lightingToday = "Bright"
 
+    thisWeekSleepScores = sleepScores[-7:] #last seven days
+    dates = wks.col_values(1) #used to place it in order by day
+    del dates[0]
+
+    dates = dates[-7:]
+    thisWeekSleepScoresOrdered = [0 for x in range(7)]
+
+    for i in range(len(thisWeekSleepScores)): #orders
+        month, day, year = (int(x) for x in dates[i].split('/'))
+        weekDay = datetime.date(year, month, day).weekday()
+        thisWeekSleepScoresOrdered[weekDay] = thisWeekSleepScores[i]
+
     wks = gc.open('Nocturnal').worksheet("Night")
 
     nigthData = wks.get_all_records()
@@ -106,7 +118,12 @@ def hello():
     return render_template('index.html', sleepGraphLabels=timeLabels, values=condensedNightData, timeWeekLabels=weekLabels,
      averageTime=avgTime, timeGraphData=thisWeekTimeOrdered, tipsArr=tips, timeSleptToday=round(float(thisWeekTime[-1]), 1),
       idealHumidity=idealHum, idealTemperature=idealTemp, idealLighting=idealLight, tempToday=idealData[-1]['Temperature'],
-       humidityToday=idealData[-1]['Humidity'], lightingToday=lightingToday)
+       humidityToday=idealData[-1]['Humidity'], lightingToday=lightingToday, thisWeekSleepScore=thisWeekSleepScoresOrdered)
  
-if __name__ == "__main__":
+@app.route("/update", methods=['POST'])
+def update():
+
+    return jsonify({'data': data})
+ 
+ if __name__ == "__main__":
     app.run(debug=True)

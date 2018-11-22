@@ -95,7 +95,7 @@
 
               <div class="split">
                   <h1>Today</h1>
-                  <h3>{{ timeSleptToday }} hours</h3>
+                  <h3 style="{{'color:green' if timeSleptToday >= averageTime else 'color:green' }}">{{ timeSleptToday }} hours</h3>
               </div>
 
               <div class="split">
@@ -210,7 +210,7 @@
                       fill: false,
                       bezierCurve : true,
                       data : [
-                          {% for item in values %}
+                          {% for item in thisWeekSleepScore %}
                             {{ item }},
                           {% endfor %}
                         ]
@@ -350,7 +350,7 @@
       
       </div>
 
-      <div style="display: flex; flex-direction: column;">
+      <!-- <div style="display: flex; flex-direction: column;"> -->
           <div class="panel">
               <div class="header">
                   <h2>Insights</h1>
@@ -397,7 +397,7 @@
             </div>
           </div>
           
-          <div class="panel">
+          <div class="panel" style="width: 100%">
               <div class="header">
                   <h2>Insights</h1>
                   <h1>Tips for Better Sleep</h1>
@@ -439,7 +439,7 @@
                 </script>
           </div>
           
-      </div>
+      <!-- </div> -->
        
         
 
@@ -452,6 +452,7 @@
   
 
 
-
+  <script type=text/javascript src="{{
+    url_for('static', filename='jquery.js') }}"></script>
 </body>
 </html>
