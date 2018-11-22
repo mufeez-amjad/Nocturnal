@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:600|Raleway:500,600,700');
 
+html {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
 body {
   font-family: 'Montserrat', sans-serif !important;
   color: #333333;
@@ -29,21 +34,13 @@ body {
   display: block;
 }
 
-/* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
   color: #0d53eb;
 }
 
-/* Style page content */
 .main {
-  margin-left: 160px; /* Same as the width of the sidebar */
+  margin-left: 160px;
   padding: 0px 10px;
-}
-
-/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
 }
 
 .container {
@@ -54,7 +51,7 @@ body {
   justify-content: space-around;
   flex-direction: column;
   overflow: hidden;
-  margin-left: 60px; /* Same as the width of the sidebar */
+  margin-left: 60px; 
   margin-right: 60px;
   margin-top: -10px;
   align-items: center;
@@ -106,8 +103,11 @@ body {
   flex-direction: row;
   justify-content: space-between;
   align-items: baseline;
+  align-content: center;
 }
-
+.panel .stats h1 {
+  font-size: 1.2em;
+}
 .panel .stats .split {
   display: flex;
   flex-direction: column;

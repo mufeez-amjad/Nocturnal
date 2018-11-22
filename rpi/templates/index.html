@@ -95,7 +95,7 @@
 
               <div class="split">
                   <h1>Today</h1>
-                  <h3>10 hours</h3>
+                  <h3>{{ timeSleptToday }} hours</h3>
               </div>
 
               <div class="split">
@@ -354,22 +354,49 @@
           <div class="panel">
               <div class="header">
                   <h2>Insights</h1>
-                  <h1>Temperature & Humidity</h1>
+                  <h1>Your Ideal Sleeping Conditions</h1>
               </div>
                 
                 <div class="stats">
-      
+                  <h1>Temperature</h1>
                     <div class="split">
                         <h1>Today</h1>
-                        <h3 style="">21°  40% RH</h3>
+                        <h3 style="{{'color:red' if tempToday > idealTemperature+1 or tempToday < idealTemperature-1 else 'color:green' }}">{{ tempToday }}°</h3>
                     </div>
       
                     <div class="split">
                         <h1>Ideal</h1>
-                        <h3 style="color: green">23°  20% RH</h3>
+                        <h3 style="color: green">{{ idealTemperature }}°</h3>
                     </div>
                 </div>
+
+                <div class="stats">
+                  <h1>Humidity</h1>
+                  <div class="split">
+                      <h1>Today</h1>
+                      <h3 style="{{'color:red' if humidityToday > idealHumidity+3 or humidityToday < idealHumidity-3 else 'color:green' }}">{{ humidityToday }} RHF</h3>
+                  </div>
+    
+                  <div class="split">
+                      <h1>Ideal</h1>
+                      <h3 style="color: green">{{ idealHumidity }} RHF</h3>
+                  </div>
+              </div>
+
+              <div class="stats">
+                <h1>Lighting</h1>
+                <div class="split">
+                    <h1>Today</h1>
+                    <h3 style="{{'color:green' if lightingToday == idealLighting else 'color:red' }}">{{ lightingToday }}</h3>
+                </div>
+  
+                <div class="split">
+                    <h1>Ideal</h1>
+                    <h3 style="color: green">{{ idealLighting }}</h3>
+                </div>
+            </div>
           </div>
+          
           <div class="panel">
               <div class="header">
                   <h2>Insights</h1>

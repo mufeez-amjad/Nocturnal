@@ -13,51 +13,26 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name('Nocturnal-7d7909
 
 gc = gspread.authorize(credentials)
 
-wks = gc.open('Nocturnal').worksheet("Time")
+wks = gc.open('Nocturnal').worksheet("Ideal")
+idealData = wks.get_all_records()
 
-# allTime = wks.col_values(2)
-# thisWeekTime = wks.col_values(4)
-# del allTime[0]
-# del thisWeekTime[0]
+#compare sleep scores with variables
+sleepScores = wks.col_values(2)
+del sleepScores[0]
+sleepScores = map(int, sleepScores)
+maxSleepScore = (max(sleepScores))
+idealTemps = []
+idealHumids = []
+idealLuxes = []
+for row in idealData:
+    if (int(row['Sleep Score']) >= maxSleepScore):
+        idealTemps.append(row['Temperature'])
+        idealHumids.append(row['Humidity'])
+        idealLuxes.append(row['Lux'])
 
-# print(allTime)
-# averageTime = 0
-# for cell in allTime:
-#     averageTime += float(cell)
-
-# averageTime /= len(allTime)
-
-# print(averageTime)
-# data = wks.get_all_records()
-# condensedData = []
-# averageForInterval = 0
-
-# print(data)
-
-
-allTime = wks.col_values(2)
-del allTime[0]
-
-thisWeekTime = allTime[-7:]
-dates = wks.col_values(1) #used to place it in order by day
-del dates[0]
-
-dates = dates[-7:]
-thisWeekTimeOrdered = [0 for x in range(7)]
-
-for i in range(len(thisWeekTime)):
-    month, day, year = (int(x) for x in dates[i].split('/'))
-    weekDay = datetime.date(year, month, day).weekday()
-    print(weekDay)
-
-# for i in range(len(data)):
-#   averageForInterval+= data[i]['Activity']
-#   # print(averageForInterval)
-#   if (data[i]['Time'] in timeLabels2):
-#     if (i < 30): averageForInterval /= i+1
-#     else: averageForInterval /= 30
-#     condensedData.append(averageForInterval)
-#     averageForInterval = 0
+idealTemperature = sum(idealTemps) / len(idealTemps)
+idealHumidity = sum(idealHumids) / len(idealHumids)
+idealLux = sum(idealLuxes) / len(idealLuxes)
 
 # print(condensedData)
 # for row in data
