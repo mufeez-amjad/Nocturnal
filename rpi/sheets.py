@@ -1,5 +1,6 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import datetime
 
 timeLabels2 = [
     '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00',
@@ -12,7 +13,7 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name('Nocturnal-7d7909
 
 gc = gspread.authorize(credentials)
 
-wks = gc.open('Nocturnal').worksheet("Night")
+wks = gc.open('Nocturnal').worksheet("Time")
 
 # allTime = wks.col_values(2)
 # thisWeekTime = wks.col_values(4)
@@ -27,23 +28,38 @@ wks = gc.open('Nocturnal').worksheet("Night")
 # averageTime /= len(allTime)
 
 # print(averageTime)
-data = wks.get_all_records()
-condensedData = []
-averageForInterval = 0
+# data = wks.get_all_records()
+# condensedData = []
+# averageForInterval = 0
 
-print(data)
+# print(data)
 
 
-for i in range(len(data)):
-  averageForInterval+= data[i]['Activity']
-  # print(averageForInterval)
-  if (data[i]['Time'] in timeLabels2):
-    if (i < 30): averageForInterval /= i+1
-    else: averageForInterval /= 30
-    condensedData.append(averageForInterval)
-    averageForInterval = 0
+allTime = wks.col_values(2)
+del allTime[0]
 
-print(condensedData)
+thisWeekTime = allTime[-7:]
+dates = wks.col_values(1) #used to place it in order by day
+del dates[0]
+
+dates = dates[-7:]
+thisWeekTimeOrdered = [0 for x in range(7)]
+
+for i in range(len(thisWeekTime)):
+    month, day, year = (int(x) for x in dates[i].split('/'))
+    weekDay = datetime.date(year, month, day).weekday()
+    print(weekDay)
+
+# for i in range(len(data)):
+#   averageForInterval+= data[i]['Activity']
+#   # print(averageForInterval)
+#   if (data[i]['Time'] in timeLabels2):
+#     if (i < 30): averageForInterval /= i+1
+#     else: averageForInterval /= 30
+#     condensedData.append(averageForInterval)
+#     averageForInterval = 0
+
+# print(condensedData)
 # for row in data
 
 # wks.delete_row(2)
