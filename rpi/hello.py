@@ -41,10 +41,34 @@ def hello():
     dates = dates[-7:]
     thisWeekTimeOrdered = [0 for x in range(7)]
 
+    sleepTimes = wks.col_values(3)
+    wakeUpTimes = wks.col_values(4)
+    del sleepTimes[0]
+    del wakeUpTimes[0]
+
+    sleepTimes = sleepTimes[-7:]
+    wakeUpTimes = wakeUpTimes[-7:]
+
+    sleepTimesOrdered = [0 for x in range(7)]
+    wakeTimesOrdered = [0 for x in range(7)]
+
+    for i in range(len(sleepTimes)): #orders
+        month, day, year = (int(x) for x in dates[i].split('/'))
+        weekDay = datetime.date(year, month, day).weekday()
+        sleepTime = int(sleepTimes[i][:2])
+        print(sleepTime)
+        if (sleepTime == 0): sleepTime = 24
+        elif (sleepTime > 0 and sleepTime < 5): sleepTime = 24 + sleepTime%24
+        sleepTimesOrdered[weekDay] = sleepTime
+        wakeTimesOrdered[weekDay] = wakeUpTimes[i][:2]  
+        
     for i in range(len(thisWeekTime)): #orders
         month, day, year = (int(x) for x in dates[i].split('/'))
         weekDay = datetime.date(year, month, day).weekday()
         thisWeekTimeOrdered[weekDay] = thisWeekTime[i]
+
+    avgSleepTime = sum(map(int, sleepTimesOrdered))/len(sleepTimesOrdered)
+    avgWakeTime = sum(map(int, wakeTimesOrdered))/len(wakeTimesOrdered)
 
     avgTime = 0
     for cell in allTime:
@@ -56,10 +80,25 @@ def hello():
     wks = gc.open('Nocturnal').worksheet("Ideal")
     idealData = wks.get_all_records()
 
-    #compare sleep scores with variables
     sleepScores = wks.col_values(2)
     del sleepScores[0]
     sleepScores = list(map(int, sleepScores))
+
+    avgSleepScoreNum = sum(sleepScores) / len(sleepScores)
+    averageSleepScore = ""
+
+    if (avgSleepScoreNum < 3): averageSleepScore = "Bad"
+    elif (avgSleepScoreNum < 6): averageSleepScore = "Decent"
+    elif (avgSleepScoreNum < 8): averageSleepScore = "Good"
+    else: averageSleepScore = "Excellent"
+
+    todaysSleepScoreNum = sleepScores[-1]
+    todaysSleepScore = ""
+    if (todaysSleepScoreNum < 3): todaysSleepScore = "Bad"
+    elif (todaysSleepScoreNum < 6): todaysSleepScore = "Decent"
+    elif (todaysSleepScoreNum < 8): todaysSleepScore = "Good"
+    else: todaysSleepScore = "Excellent"
+
     maxSleepScore = (max(sleepScores))
     idealTemps = []
     idealHumids = []
@@ -118,7 +157,8 @@ def hello():
     return render_template('index.html', sleepGraphLabels=timeLabels, values=condensedNightData, timeWeekLabels=weekLabels,
      averageTime=avgTime, timeGraphData=thisWeekTimeOrdered, tipsArr=tips, timeSleptToday=round(float(thisWeekTime[-1]), 1),
       idealHumidity=idealHum, idealTemperature=idealTemp, idealLighting=idealLight, tempToday=idealData[-1]['Temperature'],
-       humidityToday=idealData[-1]['Humidity'], lightingToday=lightingToday, thisWeekSleepScore=thisWeekSleepScoresOrdered)
+       humidityToday=idealData[-1]['Humidity'], lightingToday=lightingToday, thisWeekSleepScore=thisWeekSleepScoresOrdered,
+        sleepTimeWeek=sleepTimesOrdered, wakeTimeWeek=wakeTimesOrdered, todaysScore=todaysSleepScore, averageScore=averageSleepScore, averageSleepTime=avgSleepTime, averageWakeTime=avgWakeTime)
 
 @app.route("/update", methods=['POST'])
 def update():

@@ -183,12 +183,12 @@
   
                 <div class="split">
                     <h1>Today</h1>
-                    <h3 style="color: green">Good</h3>
+                    <h3 style="{{'color:green' if todaysScore == averageScore or todaysScore == 'Excellent' else 'color:red' }}">{{ todaysScore }}</h3>
                 </div>
   
                 <div class="split">
                     <h1>Average</h1>
-                    <h3 style="color: red">Poor</h3>
+                    <h3 style="color: green">{{ averageScore }}</h3>
                 </div>
             </div>
 
@@ -266,20 +266,19 @@
   
                 <div class="split">
                     <h1>Sleep</h1>
-                    <h3>8:00 pm</h3>
+                    <h3 style="color:red">{{ averageSleepTime }}:00</h3>
                 </div>
   
                 <div class="split">
                     <h1>Wake Up</h1>
-                    <h3>6:00 am</h3>
+                    <h3>{{ averageWakeTime }}:00</h3>
                 </div>
             </div>
 
             <div class="wakeSleepTimeGraph">
             
-                <canvas id="wakeSleepGraph" width="200" height="100"></canvas>
+                <canvas id="wakeSleepGraph" width="500" height="250"></canvas>
                 <script>
-                  // bar chart data
 
                   var lineData = {
                     labels : [
@@ -287,28 +286,30 @@
                         "{{ item }}",
                       {% endfor %}
                     ],
-                    datasets : [{
-                      backgroundColor: "#248af7",
-                      borderColor: "#248af7",
-                      fill: false,
-                      bezierCurve : true,
-                      data : [
-                          {% for item in values %}
-                            {{ item }},
-                          {% endfor %}
-                        ]
-                    },
-                    {
-                      backgroundColor: "#248af7",
-                      borderColor: "#248af7",
-                      fill: false,
-                      bezierCurve : true,
-                      data : [
-                          {% for item in values %}
-                            {{ item }}-20,
-                          {% endfor %}
-                        ]
-                    }]     
+                    datasets : [
+                      {
+                        backgroundColor: "red",
+                        borderColor: "red",
+                        fill: false,
+                        bezierCurve : true,
+                        data : [
+                            {% for item in sleepTimeWeek %}
+                              {{ item }},
+                            {% endfor %}
+                          ]
+                      },
+                      {
+                        backgroundColor: "#248af7",
+                        borderColor: "#248af7",
+                        fill: false,
+                        bezierCurve : true,
+                        data : [
+                            {% for item in wakeTimeWeek %}
+                              {{ item }},
+                            {% endfor %}
+                          ]
+                      },
+                    ]    
                   }
                   
                   // get bar chart canvas

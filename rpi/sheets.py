@@ -13,26 +13,42 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name('Nocturnal-7d7909
 
 gc = gspread.authorize(credentials)
 
-wks = gc.open('Nocturnal').worksheet("Ideal")
-idealData = wks.get_all_records()
+wks = gc.open('Nocturnal').worksheet("Time")
 
-#compare sleep scores with variables
-sleepScores = wks.col_values(2)
-del sleepScores[0]
-sleepScores = map(int, sleepScores)
-maxSleepScore = (max(sleepScores))
-idealTemps = []
-idealHumids = []
-idealLuxes = []
-for row in idealData:
-    if (int(row['Sleep Score']) >= maxSleepScore):
-        idealTemps.append(row['Temperature'])
-        idealHumids.append(row['Humidity'])
-        idealLuxes.append(row['Lux'])
+allTime = wks.col_values(2)
+del allTime[0]
 
-idealTemperature = sum(idealTemps) / len(idealTemps)
-idealHumidity = sum(idealHumids) / len(idealHumids)
-idealLux = sum(idealLuxes) / len(idealLuxes)
+thisWeekTime = allTime[-7:] #last seven days
+dates = wks.col_values(1) #used to place it in order by day
+del dates[0]
+
+dates = dates[-7:]
+thisWeekTimeOrdered = [0 for x in range(7)]
+
+sleepTimes = wks.col_values(3)
+wakeUpTimes = wks.col_values(4)
+del sleepTimes[0]
+del wakeUpTimes[0]
+
+sleepTimes = sleepTimes[-7:]
+wakeUpTimes = wakeUpTimes[-7:]
+
+sleepTimesOrdered = [0 for x in range(7)]
+wakeTimesOrdered = [0 for x in range(7)]
+
+for i in range(len(sleepTimes)): #orders
+    month, day, year = (int(x) for x in dates[i].split('/'))
+    weekDay = datetime.date(year, month, day).weekday()
+    sleepTime = int(sleepTimes[i][:2])
+    print(sleepTime)
+    if (sleepTime == 0): sleepTime = 24
+    elif (sleepTime > 0 and sleepTime < 5): sleepTime = 24 + sleepTime%24
+    sleepTimesOrdered[weekDay] = sleepTime
+    wakeTimesOrdered[weekDay] = wakeUpTimes[i][:2]  
+
+print(sleepTimesOrdered)
+print(wakeTimesOrdered)
+
 
 # print(condensedData)
 # for row in data
