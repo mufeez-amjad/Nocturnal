@@ -70,11 +70,15 @@ def hello():
     avgSleepTime = sum(map(int, sleepTimesOrdered))/len(sleepTimesOrdered)
     avgWakeTime = sum(map(int, wakeTimesOrdered))/len(wakeTimesOrdered)
 
+    todaysSleepTime = 0
+    if(len(thisWeekTime) > 0): todaysSleepTime = float(thisWeekTime[-1])
+    else: todaysSleepTime = 0
+
     avgTime = 0
     for cell in allTime:
         avgTime += float(cell)
 
-    avgTime /= len(allTime)
+    if (len(allTime) > 0): avgTime /= len(allTime)
     avgTime = round(avgTime, 1)
 
     wks = gc.open('Nocturnal').worksheet("Ideal")
@@ -83,8 +87,8 @@ def hello():
     sleepScores = wks.col_values(2)
     del sleepScores[0]
     sleepScores = list(map(int, sleepScores))
-
-    avgSleepScoreNum = sum(sleepScores) / len(sleepScores)
+    avgSleepScoreNum = sum(sleepScores)
+    if (len(sleepScores) > 0): avgSleepScoreNum /= len(sleepScores)
     averageSleepScore = ""
 
     if (avgSleepScoreNum < 3): averageSleepScore = "Bad"
@@ -92,14 +96,16 @@ def hello():
     elif (avgSleepScoreNum < 8): averageSleepScore = "Good"
     else: averageSleepScore = "Excellent"
 
-    todaysSleepScoreNum = sleepScores[-1]
+    todaysSleepScoreNum = 0
+    if (len(sleepScores) > 1): todaysSleepScoreNum = sleepScores[-1]
     todaysSleepScore = ""
     if (todaysSleepScoreNum < 3): todaysSleepScore = "Bad"
     elif (todaysSleepScoreNum < 6): todaysSleepScore = "Decent"
     elif (todaysSleepScoreNum < 8): todaysSleepScore = "Good"
     else: todaysSleepScore = "Excellent"
 
-    maxSleepScore = (max(sleepScores))
+    maxSleepScore = 0
+    if (len(sleepScores) > 0): maxSleepScore = (max(sleepScores))
     idealTemps = []
     idealHumids = []
     idealLuxes = []
@@ -109,9 +115,13 @@ def hello():
             idealHumids.append(row['Humidity'])
             idealLuxes.append(row['Lux'])
 
-    idealTemp = sum(idealTemps) / len(idealTemps)
-    idealHum = sum(idealHumids) / len(idealHumids)
-    idealLux = sum(idealLuxes) / len(idealLuxes)
+    idealTemp = sum(idealTemps)
+    if (len(idealTemps) > 0): idealTemp /= len(idealTemps)
+    idealHum = sum(idealHumids)
+    if (len(idealHumids) > 0): idealHum /= len(idealHumids)
+    idealLux = sum(idealLuxes)
+    if (len(idealLuxes) > 0): idealLux /= len(idealLuxes)
+
     idealLight = ""
     if (idealLux < 300): idealLight = "Dark"
     elif (idealLux < 450): idealLight = "Dim"
@@ -119,11 +129,18 @@ def hello():
     else: idealLight = "Bright"
 
     lightingToday = ""
-    todaysLighting = idealData[-1]['Lux']
+    todaysLighting = 0
+    if (len(idealData) > 0): todaysLighting = idealData[-1]['Lux']
     if (todaysLighting < 300): lightingToday = "Dark"
     elif (todaysLighting < 450): lightingToday = "Dim"
     elif (todaysLighting < 650): lightingToday = "Average"
     else: lightingToday = "Bright"
+
+    tempToday = 0
+    if (len(idealData) > 0): tempToday = idealData[-1]['Temperature']
+
+    humidityToday = 0
+    if (len(idealData) > 0): humidityToday = idealData[-1]['Humidity']
 
     thisWeekSleepScores = sleepScores[-7:] #last seven days
     dates = wks.col_values(1) #used to place it in order by day
@@ -155,9 +172,9 @@ def hello():
             averageForInterval = 0
 
     return render_template('index.html', sleepGraphLabels=timeLabels, values=condensedNightData, timeWeekLabels=weekLabels,
-     averageTime=avgTime, timeGraphData=thisWeekTimeOrdered, tipsArr=tips, timeSleptToday=round(float(thisWeekTime[-1]), 1),
-      idealHumidity=idealHum, idealTemperature=idealTemp, idealLighting=idealLight, tempToday=idealData[-1]['Temperature'],
-       humidityToday=idealData[-1]['Humidity'], lightingToday=lightingToday, thisWeekSleepScore=thisWeekSleepScoresOrdered,
+     averageTime=avgTime, timeGraphData=thisWeekTimeOrdered, tipsArr=tips, timeSleptToday=round(todaysSleepTime, 1),
+      idealHumidity=idealHum, idealTemperature=idealTemp, idealLighting=idealLight, tempToday=tempToday,
+       humidityToday=humidityToday, lightingToday=lightingToday, thisWeekSleepScore=thisWeekSleepScoresOrdered,
         sleepTimeWeek=sleepTimesOrdered, wakeTimeWeek=wakeTimesOrdered, todaysScore=todaysSleepScore, averageScore=averageSleepScore, averageSleepTime=avgSleepTime, averageWakeTime=avgWakeTime)
 
 @app.route("/update", methods=['POST'])

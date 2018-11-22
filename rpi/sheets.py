@@ -13,41 +13,22 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name('Nocturnal-7d7909
 
 gc = gspread.authorize(credentials)
 
-wks = gc.open('Nocturnal').worksheet("Time")
+wks = gc.open('Nocturnal').worksheet("Night")
 
-allTime = wks.col_values(2)
-del allTime[0]
+nightData = wks.get_all_records()
+condensedNightData = []
+averageForInterval = 0
 
-thisWeekTime = allTime[-7:] #last seven days
-dates = wks.col_values(1) #used to place it in order by day
-del dates[0]
-
-dates = dates[-7:]
-thisWeekTimeOrdered = [0 for x in range(7)]
-
-sleepTimes = wks.col_values(3)
-wakeUpTimes = wks.col_values(4)
-del sleepTimes[0]
-del wakeUpTimes[0]
-
-sleepTimes = sleepTimes[-7:]
-wakeUpTimes = wakeUpTimes[-7:]
-
-sleepTimesOrdered = [0 for x in range(7)]
-wakeTimesOrdered = [0 for x in range(7)]
-
-for i in range(len(sleepTimes)): #orders
-    month, day, year = (int(x) for x in dates[i].split('/'))
-    weekDay = datetime.date(year, month, day).weekday()
-    sleepTime = int(sleepTimes[i][:2])
-    print(sleepTime)
-    if (sleepTime == 0): sleepTime = 24
-    elif (sleepTime > 0 and sleepTime < 5): sleepTime = 24 + sleepTime%24
-    sleepTimesOrdered[weekDay] = sleepTime
-    wakeTimesOrdered[weekDay] = wakeUpTimes[i][:2]  
-
-print(sleepTimesOrdered)
-print(wakeTimesOrdered)
+timeLabels = []
+print(nightData)
+for i in range(len(nightData)):
+    averageForInterval += nightData[i]['Activity']
+    if (nightData[i]['Time'] in timeIntervals):
+        timeLabels.append(nightData[i]['Time'])
+        if (i < 30): averageForInterval /= i+1
+        else: averageForInterval /= 30
+        condensedNightData.append(averageForInterval)
+        averageForInterval = 0
 
 
 # print(condensedData)
