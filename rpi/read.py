@@ -44,6 +44,7 @@ def getValue(line):
     return float(line[line.find(":")+1:])
 
 def uploadMinute():
+    global cooldown, spikes, max_activity
     if cooldown == 0:
         if max_activity > 0.85:
             cooldown = 10
@@ -107,7 +108,7 @@ def readData():
                             start_time = datetime.datetime.now()
                             sleeping = True
                     elif previous_light < 300 and value > 300 and sleeping:
-                        time_difference = end_time - start_time
+                        time_difference = datetime.datetime.now() - start_time
                         if time_difference.total_seconds() > 3600:
                             print("Waking up...")
                             end_time = datetime.datetime.now()
