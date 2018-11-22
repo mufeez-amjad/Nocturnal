@@ -1,0 +1,69 @@
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js'></script>
+
+<div class="sleepGraph" id="sleepCycleGraph">
+      
+  <canvas id="myChart" width="1050" height="200"></canvas>
+  <script>
+    // bar chart data
+
+    var myChart = document.getElementById("myChart").getContext("2d");
+
+    var gradient = myChart.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(255,255,255,0.6)');   
+    gradient.addColorStop(0.7, 'rgba(255,255,255,0)');
+
+    var lineData = {
+      labels : [
+        {% for item in sleepGraphLabels %}
+          "{{ item }}",
+        {% endfor %}
+      ],
+      datasets : [{
+        backgroundColor: gradient,
+        borderColor: "#fff",
+        
+        bezierCurve : true,
+        data : [
+            {% for item in values %}
+              {{ item }},
+            {% endfor %}
+          ]
+      }]     
+    }
+    
+    // get bar chart canvas
+    steps = 10
+    // max = {{ max }}
+    // draw bar chart
+    var myLineChart = new Chart(myChart, {
+        type: 'line',
+        data: lineData,
+        options: {
+          legend: {
+              display: false,
+              labels: {
+                  fontColor: 'rgb(255, 255, 255)'
+              },
+          },
+          animation: false,
+          scales: {
+              xAxes: [{
+                gridLines: {
+                  display: false,
+                },
+                ticks: {
+                  fontColor: 'rgb(255, 255, 255, 0.5)',
+                }
+              }],
+              yAxes: [{
+                display: false,
+                gridLines:  {
+                  display: false,
+                },
+                
+              }]
+          }
+        }
+    });
+  </script>
+</div>

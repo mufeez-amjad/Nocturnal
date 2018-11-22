@@ -16,7 +16,7 @@
 
   <div class='container'>
 
-    <div class="sleepGraph">
+    <div class="sleepGraph" id="sleepCycleGraph">
       
         <canvas id="myChart" width="1050" height="200"></canvas>
         <script>
@@ -452,7 +452,7 @@
   
 
 
-  <script type=text/javascript src="{{
-    url_for('static', filename='jquery.js') }}"></script>
+  <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="{{ url_for('static', filename='jquery.js') }}"></script>
 </body>
 </html>

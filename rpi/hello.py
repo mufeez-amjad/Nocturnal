@@ -100,6 +100,30 @@ def hello():
 
     wks = gc.open('Nocturnal').worksheet("Night")
 
+    nightData = wks.get_all_records()
+    condensedNightData = []
+    averageForInterval = 0
+
+    timeLabels = []
+
+    for i in range(len(nightData)):
+        averageForInterval += nightData[i]['Activity']
+        if (nightData[i]['Time'] in timeIntervals):
+            timeLabels.append(nightData[i]['Time'])
+            if (i < 30): averageForInterval /= i+1
+            else: averageForInterval /= 30
+            condensedNightData.append(averageForInterval)
+            averageForInterval = 0
+
+    return render_template('index.html', sleepGraphLabels=timeLabels, values=condensedNightData, timeWeekLabels=weekLabels,
+     averageTime=avgTime, timeGraphData=thisWeekTimeOrdered, tipsArr=tips, timeSleptToday=round(float(thisWeekTime[-1]), 1),
+      idealHumidity=idealHum, idealTemperature=idealTemp, idealLighting=idealLight, tempToday=idealData[-1]['Temperature'],
+       humidityToday=idealData[-1]['Humidity'], lightingToday=lightingToday, thisWeekSleepScore=thisWeekSleepScoresOrdered)
+ 
+@app.route("/update", methods=['POST'])
+def update():
+    wks = gc.open('Nocturnal').worksheet("Night")
+
     nigthData = wks.get_all_records()
     condensedNightData = []
     averageForInterval = 0
@@ -115,15 +139,7 @@ def hello():
             condensedNightData.append(averageForInterval)
             averageForInterval = 0
 
-    return render_template('index.html', sleepGraphLabels=timeLabels, values=condensedNightData, timeWeekLabels=weekLabels,
-     averageTime=avgTime, timeGraphData=thisWeekTimeOrdered, tipsArr=tips, timeSleptToday=round(float(thisWeekTime[-1]), 1),
-      idealHumidity=idealHum, idealTemperature=idealTemp, idealLighting=idealLight, tempToday=idealData[-1]['Temperature'],
-       humidityToday=idealData[-1]['Humidity'], lightingToday=lightingToday, thisWeekSleepScore=thisWeekSleepScoresOrdered)
+    return render_template('sleepGraph.html', sleepGraphLabels=timeLabels, values=condensedNightData, timeWeekLabels=weekLabels)
  
-@app.route("/update", methods=['POST'])
-def update():
-
-    return jsonify({'data': data})
- 
- if __name__ == "__main__":
+if __name__ == "__main__":
     app.run(debug=True)
